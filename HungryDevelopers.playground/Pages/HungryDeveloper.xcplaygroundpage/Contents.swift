@@ -1,10 +1,10 @@
 import Foundation
 
-var lock = NSLock()
-
 class Spoon {
     
+    private var lock = NSLock()
     var isBeingUsed : Bool
+    var index: Int
     
     func pickUp() {
         lock.lock()
@@ -16,8 +16,9 @@ class Spoon {
         lock.unlock()
     }
     
-    init(isBeingUsed: Bool) {
+    init(index: Int, isBeingUsed: Bool = false) {
         self.isBeingUsed = isBeingUsed
+        self.index = index
     }
     
 }
@@ -35,44 +36,61 @@ class Developer {
     }
     
     func think() {
-        //pickup right and left
-        if leftSpoon.isBeingUsed == false {
-        leftSpoon.pickUp()
-        print("\(name) picked up left spoon")
-        }
+        
+//        if leftSpoon.index < rightSpoon.index {
+//            leftSpoon.pickUp()
+//            print("\(name) picked up left spoon")
+//            rightSpoon.pickUp()
+//            print("\(name) picked up right spoon")
+//        } else {
+//            rightSpoon.pickUp()
+//            print("\(name) picked up right spoon")
+//            leftSpoon.pickUp()
+//            print("\(name) picked up left spoon")
+//        }
+        
         
         if rightSpoon.isBeingUsed == false {
         rightSpoon.pickUp()
         print("\(name) picking up right spoon")
+        }
+        
+        if leftSpoon.isBeingUsed == false {
+        leftSpoon.pickUp()
+        print("\(name) picking up left spoon")
         }
     }
     
     
     func eat() {
         //putdown right and left
-        let randomTime = UInt32.random(in: 0xD800...0xDFFF)
-        usleep(randomTime)
+        //let randomTime = UInt32.random(in: 0xD800...0xDFFF)
+        usleep(1000)
+        if leftSpoon.isBeingUsed == true {
         leftSpoon.putDown()
         print("\(name) put down left spoon")
-        usleep(randomTime)
+        }
+        usleep(1000)
+        if rightSpoon.isBeingUsed == true {
         rightSpoon.putDown()
         print("\(name) put down right spoon")
-
+        }
     }
     
     func run() {
         while(true) {
             think()
             eat()
+            return
         }
     }
 }
 
-var spoon1 = Spoon(isBeingUsed: false)
-var spoon2 = Spoon(isBeingUsed: false)
-var spoon3 = Spoon(isBeingUsed: false)
-var spoon4 = Spoon(isBeingUsed: false)
-var spoon5 = Spoon(isBeingUsed: false)
+var spoon1 = Spoon(index: 1)
+var spoon2 = Spoon(index: 2)
+var spoon3 = Spoon(index: 3)
+var spoon4 = Spoon(index: 4)
+var spoon5 = Spoon(index: 5)
 
 
 var developer1 = Developer(name: "Dongwoo(1)", leftSpoon: spoon5, rightSpoon: spoon1)
